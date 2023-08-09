@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "691494936154",
+    "project_id": "hospital-book-5863a",
+    "storage_bucket": "hospital-book-5863a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:691494936154:android:fd5f0bc309f69892e70263",
+        "android_client_info": {
+          "package_name": "com.omega.hospitalbooking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "691494936154-3rekuct44m3nsjv43r9d0rbjbb6mq2ah.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEPwFb1jI-IP4JGgQWGvdoojFpbGo0FTI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "691494936154-3rekuct44m3nsjv43r9d0rbjbb6mq2ah.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
