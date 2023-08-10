@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -113,14 +114,25 @@ class _LoginState extends State<Login> {
                             credential = await FirebaseAuth.instance
                                 .signInWithEmailAndPassword(
                                     email: 'ngbahoch@a.com',
-                                    password: passController.text);
+                                    password: passController.text)
+                                .then((value) async {
+                              var pref = await SharedPreferences.getInstance();
+                              await pref.setString(
+                                  'password', passController.text);
+
+                              await pref.setString(
+                                  'username', 'ngbahoch@a.com');
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MyHomePage()));
+                            });
                           } on FirebaseAuthException catch (e) {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => Register()));
                           }
-                          print(credential);
                           //print(jsonObject['result']);
                           //   if (jsonObject['result']) {
                           //     //save Pref

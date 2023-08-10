@@ -1,7 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hospital_booking/firebase_options.dart';
 import 'package:hospital_booking/screens/home.dart';
 //import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hospital_booking/screens/loginWithUser.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'home.dart';
 import 'loginWithUser.dart';
@@ -16,8 +21,36 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   bool passVisibility = false;
   int passLength = 0;
+  var nameController = TextEditingController();
+  var natIDController = TextEditingController();
+  var userController = TextEditingController();
+  var passController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    CollectionReference users = FirebaseFirestore.instance.collection('user');
+    final FirebaseAuth auth = FirebaseAuth.instance;
+
+    Future<void> addUser() {
+      final User? user = auth.currentUser;
+      final uid = user?.uid;
+      // Call the user's CollectionReference to add a new user
+      if (uid != null) {
+        return users
+            .doc(uid)
+            .set({
+              'username': userController.text,
+              'name': nameController.text, // John Doe
+              'natID': natIDController.text, // Stokes and Sons
+              //'age': null // 42
+            })
+            .then((value) => print("User Added"))
+            .catchError((error) => print("Failed to add user: $error"));
+      } else {
+        print('UID is null');
+        return Future.delayed(Duration(microseconds: 0));
+      }
+    }
+
     return Scaffold(
       body: Container(
         child: Column(
@@ -41,7 +74,8 @@ class _RegisterState extends State<Register> {
             ),
             Container(
               padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
-              child: const TextField(
+              child: TextField(
+                  controller: nameController,
                   //obscureText: true,
                   textAlign: TextAlign.left,
                   style: TextStyle(fontFamily: 'Actor', fontSize: 20),
@@ -57,8 +91,9 @@ class _RegisterState extends State<Register> {
 
             Container(
               padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
-              child: const TextField(
+              child: TextField(
                   //obscureText: true,
+                  controller: natIDController,
                   textAlign: TextAlign.left,
                   style: TextStyle(fontFamily: 'Actor', fontSize: 20),
                   decoration: InputDecoration(
@@ -73,8 +108,9 @@ class _RegisterState extends State<Register> {
             //Username
             Container(
               padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
-              child: const TextField(
+              child: TextField(
                   //obscureText: true,
+                  controller: userController,
                   textAlign: TextAlign.left,
                   style: TextStyle(fontFamily: 'Actor', fontSize: 20),
                   decoration: InputDecoration(
@@ -89,6 +125,7 @@ class _RegisterState extends State<Register> {
             Container(
               padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
               child: TextField(
+                  controller: passController,
                   onChanged: (text) {
                     setState(() {
                       passLength = text.length;
@@ -136,6 +173,8 @@ class _RegisterState extends State<Register> {
             const SizedBox(
               height: 30,
             ),
+
+            //register button
             SizedBox(
                 width: 150,
                 height: 50,
@@ -149,11 +188,40 @@ class _RegisterState extends State<Register> {
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                         )),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MyHomePage()));
+                    onPressed: () async {
+                      try {
+                        Firebase.initializeApp(
+                            options: DefaultFirebaseOptions.currentPlatform);
+                        final credential = await FirebaseAuth.instance
+                            .createUserWithEmailAndPassword(
+                          email: userController.text + '@a.com',
+                          password: passController.text,
+                        )
+                            .then((value) async {
+                          addUser();
+                          var pref = await SharedPreferences.getInstance();
+                          await pref.setString('password', passController.text);
+
+                          await pref.setString(
+                              'username', userController.text + '@a.com');
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const MyHomePage()));
+                        });
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'weak-password') {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                                  Text('The password provided is too weak.')));
+                        } else if (e.code == 'email-already-in-use') {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                  'The account already exists for that username.')));
+                        }
+                      } catch (e) {
+                        print(e);
+                      }
                     },
                     child: const Text(
                       'Register',

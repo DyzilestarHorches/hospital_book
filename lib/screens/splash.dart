@@ -29,26 +29,28 @@ class _SplashState extends State<Splash> {
 
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
-    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
-      if (user == null) {
-        if (userName == null || password == null) {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => Login()));
-        } else {
-          try {
-            final credential = await FirebaseAuth.instance
-                .signInWithEmailAndPassword(
-                    email: userName, password: password);
-          } on FirebaseAuthException catch (e) {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => Register()));
-          }
-        }
-      } else {
+    // FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+    //   if (user == null) {
+    if (userName == null || password == null) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => Login()));
+    } else {
+      try {
+        FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: userName, password: password)
+            .then((value) => {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => MyHomePage()))
+                });
+      } on FirebaseAuthException catch (e) {
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => MyHomePage()));
+            context, MaterialPageRoute(builder: (context) => Register()));
       }
-    });
+    }
+    // } else {
+    //   Navigator.of(context).pushReplacement(
+    //       MaterialPageRoute(builder: (context) => MyHomePage()));
+    // }
 
     //check with server
   }
