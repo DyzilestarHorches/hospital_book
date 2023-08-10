@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hospital_booking/firebase_options.dart';
 import 'package:hospital_booking/screens/home.dart';
 import 'package:hospital_booking/screens/loginWithUser.dart';
 import 'package:hospital_booking/screens/register.dart';
@@ -21,6 +24,8 @@ class _LoginState extends State<Login> {
   final passController = TextEditingController();
   bool passVisibility = false;
   bool isWaitingForLogin = false;
+
+  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,36 +105,41 @@ class _LoginState extends State<Login> {
                           setState(() {
                             isWaitingForLogin = true;
                           });
+                          var credential;
+                          try {
+                            await Firebase.initializeApp(
+                                options:
+                                    DefaultFirebaseOptions.currentPlatform);
+                            credential = await FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
+                                    email: 'ngbahoch@a.com',
+                                    password: passController.text);
+                          } on FirebaseAuthException catch (e) {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Register()));
+                          }
+                          print(credential);
+                          //print(jsonObject['result']);
+                          //   if (jsonObject['result']) {
+                          //     //save Pref
+                          //     var pref = await SharedPreferences.getInstance();
+                          //     await pref.setString(
+                          //         'password', passController.text);
 
-                          var dio = Dio();
-                          String password = passController.text;
-                          dio
-                              .get(
-                                  'http://148.72.158.178/~nandigho/blog/login.php?user=abc123@gmail.com&pass=$password')
-                              .then((res) async {
-                            setState(() {
-                              isWaitingForLogin = false;
-                            });
-                            var jsonObject = jsonDecode(res.data);
-                            //print(jsonObject['result']);
-                            if (jsonObject['result']) {
-                              //save Pref
-                              var pref = await SharedPreferences.getInstance();
-                              await pref.setString(
-                                  'password', passController.text);
-
-                              //move Home
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const MyHomePage()));
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text(jsonObject['reason'])));
-                            }
-                          });
+                          //     //move Home
+                          //     Navigator.push(
+                          //         context,
+                          //         MaterialPageRoute(
+                          //             builder: (context) =>
+                          //                 const MyHomePage()));
+                          //   } else {
+                          //     ScaffoldMessenger.of(context).showSnackBar(
+                          //         SnackBar(
+                          //             content: Text(jsonObject['reason'])));
+                          //   }
+                          // });
                         },
                         child: const Text(
                           'Login',

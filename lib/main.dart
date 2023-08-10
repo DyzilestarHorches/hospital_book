@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:hospital_booking/screens/splash.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'app_state.dart';
 
 void main() {
-  runApp(const MyApp());
+  // Modify from here...
+  WidgetsFlutterBinding.ensureInitialized();
+
+  runApp(ChangeNotifierProvider(
+    create: (context) => ApplicationState(),
+    builder: ((context, child) => const MyApp()),
+  ));
+  // ...to here.
 }
 
 class MyApp extends StatelessWidget {

@@ -10,6 +10,13 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFFF29A49),
+        actions: [Icon(Icons.notifications)],
+      ),
+      drawer: Drawer(),
+      body: Text('Home'),
+    );
   }
 }

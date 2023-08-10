@@ -1,4 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hospital_booking/firebase_options.dart';
+import 'package:hospital_booking/screens/home.dart';
+import 'package:hospital_booking/screens/login.dart';
+import 'package:hospital_booking/screens/register.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Splash extends StatefulWidget {
@@ -16,9 +22,33 @@ class _SplashState extends State<Splash> {
   }
 
   Future<void> checkLogin() async {
+    await Future.delayed(Duration(seconds: 2));
     var pref = await SharedPreferences.getInstance();
-    var userName = pref.getString('username');
-    var passWord = pref.getString('password');
+    String? userName = pref.getString('username');
+    String? password = pref.getString('password');
+
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+      if (user == null) {
+        if (userName == null || password == null) {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => Login()));
+        } else {
+          try {
+            final credential = await FirebaseAuth.instance
+                .signInWithEmailAndPassword(
+                    email: userName, password: password);
+          } on FirebaseAuthException catch (e) {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => Register()));
+          }
+        }
+      } else {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => MyHomePage()));
+      }
+    });
 
     //check with server
   }
