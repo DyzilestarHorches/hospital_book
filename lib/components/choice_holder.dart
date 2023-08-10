@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 class ChoiceHolder extends StatefulWidget {
   final int numberOfChoices;
   final List<String> choices;
-  const ChoiceHolder(this.numberOfChoices, this.choices, {super.key});
+  final int defaultChoice;
+  final ValueChanged<int> updateChoice;
+  const ChoiceHolder(
+      this.numberOfChoices, this.choices, this.defaultChoice, this.updateChoice,
+      {super.key});
 
   @override
   State<ChoiceHolder> createState() => _ChoiceHolderState();
@@ -11,8 +15,8 @@ class ChoiceHolder extends StatefulWidget {
 
 class _ChoiceHolderState extends State<ChoiceHolder> {
   @override
-  int choosing = 0;
   Widget build(BuildContext context) {
+    int choosing = widget.defaultChoice;
     return Container(
       width: double.infinity,
       height: 60,
@@ -29,6 +33,7 @@ class _ChoiceHolderState extends State<ChoiceHolder> {
                       onTap: () {
                         setState(() {
                           choosing = e.key;
+                          widget.updateChoice(choosing);
                         });
                       },
                       child: ChoiceHolderChoice(e.value, choosing == e.key))))
@@ -55,7 +60,11 @@ class _ChoiceHolderChoiceState extends State<ChoiceHolderChoice> {
           border: widget.isChosen ? Border.all(color: Colors.black) : null,
           color: widget.isChosen ? Color(0xFFDEDEDE) : Colors.transparent),
       alignment: Alignment.center,
-      child: Text(widget.choice),
+      child: Text(
+        widget.choice,
+        style: TextStyle(
+            fontFamily: 'Actor', fontSize: (widget.isChosen ? 20 : 17)),
+      ),
     );
   }
 }

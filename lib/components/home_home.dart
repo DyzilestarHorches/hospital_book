@@ -30,90 +30,93 @@ class _HomeWidgetState extends State<HomeWidget> {
                 snapshot.data!.data() as Map<String, dynamic>;
             return Padding(
               padding: EdgeInsets.fromLTRB(30, 20, 30, 20),
-              child: Column(children: [
-                //profile
-                Container(
-                  child: Row(children: [
-                    //photo
-                    Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage('assets/images/billgate.jpg')),
-                          borderRadius: BorderRadius.circular((50))),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    //info
-                    Container(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${data['name']}',
-                              style: TextStyle(
-                                  fontFamily: 'Actor',
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              'Nat. ID: ${data['natID']}',
-                              style:
-                                  TextStyle(fontFamily: 'Actor', fontSize: 15),
-                            ),
-                          ]),
-                    )
-                  ]),
-                ),
-
-                const SizedBox(
-                  height: 40,
-                ),
-                //title
-                Container(
-                  width: double.infinity,
-                  alignment: Alignment.centerLeft,
-                  child: const Text(
-                    'Bookings',
-                    style: TextStyle(
-                        fontFamily: 'Actor',
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold),
+              child: SingleChildScrollView(
+                child: Column(children: [
+                  //profile
+                  Container(
+                    child: Row(children: [
+                      //photo
+                      Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image:
+                                    AssetImage('assets/images/billgate.jpg')),
+                            borderRadius: BorderRadius.circular((50))),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      //info
+                      Container(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${data['name']}',
+                                style: TextStyle(
+                                    fontFamily: 'Actor',
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                'Nat. ID: ${data['natID']}',
+                                style: TextStyle(
+                                    fontFamily: 'Actor', fontSize: 15),
+                              ),
+                            ]),
+                      )
+                    ]),
                   ),
-                ),
 
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Booking()));
-                  },
-                  child: HomeCard(
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  //title
+                  Container(
+                    width: double.infinity,
+                    alignment: Alignment.centerLeft,
+                    child: const Text(
+                      'Bookings',
+                      style: TextStyle(
+                          fontFamily: 'Actor',
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Booking()));
+                    },
+                    child: HomeCard(
+                        'assets/images/hospital.jpg',
+                        'Book A Ticket',
+                        'Describe symptom, choose time, and get a ticket',
+                        Color(0xFF61C4E3)),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+
+                  HomeCard(
                       'assets/images/hospital.jpg',
                       'Book A Ticket',
                       'Describe symptom, choose time, and get a ticket',
-                      Color(0xFF61C4E3)),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-
-                HomeCard(
-                    'assets/images/hospital.jpg',
-                    'Book A Ticket',
-                    'Describe symptom, choose time, and get a ticket',
-                    Color(0xFFA8DE65)),
-                const SizedBox(
-                  height: 20,
-                ),
-                HomeCard(
-                    'assets/images/hospital.jpg',
-                    'Book A Ticket',
-                    'Describe symptom, choose time, and get a ticket',
-                    Color(0xFFF7E16D))
-              ]),
+                      Color(0xFFA8DE65)),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  HomeCard(
+                      'assets/images/hospital.jpg',
+                      'Book A Ticket',
+                      'Describe symptom, choose time, and get a ticket',
+                      Color(0xFFF7E16D))
+                ]),
+              ),
             );
           }
           return CircularProgressIndicator();
