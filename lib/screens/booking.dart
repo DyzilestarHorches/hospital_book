@@ -18,6 +18,7 @@ int getTime(bool isMorning) {
 }
 
 class _BookingState extends State<Booking> {
+  final symptomController = TextEditingController();
   String department = '';
   int dayChoice = 0;
   int shiftChoice = 0;
@@ -89,7 +90,8 @@ class _BookingState extends State<Booking> {
               height: 20,
             ),
 
-            const TextField(
+            TextField(
+              controller: symptomController,
               decoration: InputDecoration(
                   hintText: 'Symptom',
                   hintStyle: TextStyle(fontFamily: 'Actor', fontSize: 20)),
@@ -101,10 +103,11 @@ class _BookingState extends State<Booking> {
 
             //sugest
             const Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text('Suggested Room:'),
                 Text(
-                  'Otorhinolaryngology',
+                  'General',
                   style: TextStyle(
                       fontFamily: 'Actor',
                       fontSize: 20,
@@ -131,11 +134,11 @@ class _BookingState extends State<Booking> {
               });
             }),
             const SizedBox(
-              height: 40,
+              height: 60,
             ),
-
+            //button
             SizedBox(
-                width: 150,
+                width: 250,
                 height: 50,
                 child: ElevatedButton(
                   onPressed: () {
@@ -146,10 +149,13 @@ class _BookingState extends State<Booking> {
                         now.year, now.month, now.day + dayChoice, time);
                     print(time);
                     print(date);
+
+                    //navigate
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => Checkout(date)));
+                            builder: (context) =>
+                                Checkout(date, symptomController.text)));
                   },
                   style: ButtonStyle(
                       backgroundColor:

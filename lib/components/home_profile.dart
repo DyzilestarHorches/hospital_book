@@ -26,7 +26,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
           if (snapshot.hasError) {
             return Text("Something went wrong");
           }
-
           if (snapshot.hasData && !snapshot.data!.exists) {
             return Text("Document does not exist");
           }
@@ -36,34 +35,40 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 snapshot.data!.data() as Map<String, dynamic>;
             return Center(
               child: Container(
-                width: 300,
+                width: 350,
                 height: 230,
                 child: Stack(
                   children: [
                     //info
                     Positioned(
                       top: 30,
-                      child: Container(
-                        width: 300,
-                        height: 200,
-                        decoration: BoxDecoration(color: Colors.blue),
-                        child: Column(children: [
-                          Text('${data['name']}'),
-                          Text('${data['natID']}'),
-                          //Text('${data['age']}'),
-                        ]),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                          width: 350 - 80,
+                          height: 200,
+                          decoration: BoxDecoration(color: Colors.blue),
+                          child: Column(children: [
+                            Text('${data['name']}'),
+                            Text('${data['natID']}'),
+                            //Text('${data['age']}'),
+                          ]),
+                        ),
                       ),
                     ),
                     Positioned(
-                      left: 150 - 30,
+                      left: 0,
                       child: Container(
-                        width: 60,
-                        height: 60,
-                        child: Icon(Icons.person),
-                        decoration: BoxDecoration(
-                            color: Colors.orange,
-                            borderRadius: BorderRadius.circular(30)),
-                      ),
+                          width: 80,
+                          height: 80,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(40),
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        'assets/images/billgate.jpg'))),
+                          )),
                     ),
                   ],
                 ),
@@ -71,7 +76,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
             );
           }
 
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         });
   }
 }

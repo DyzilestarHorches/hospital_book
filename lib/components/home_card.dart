@@ -13,7 +13,7 @@ class HomeCard extends StatelessWidget {
     return Container(
         width: double.infinity,
         height: 100,
-        padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
+        //padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
         child: Wrap(children: [
           Material(
             borderRadius: BorderRadius.circular(20),

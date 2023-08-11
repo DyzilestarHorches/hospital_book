@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hospital_booking/components/home_card.dart';
+import 'package:hospital_booking/screens/myTicket.dart';
 
 import '../screens/booking.dart';
 
@@ -28,98 +29,109 @@ class _HomeWidgetState extends State<HomeWidget> {
           if (snapshot.connectionState == ConnectionState.done) {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
-            return Padding(
-              padding: EdgeInsets.fromLTRB(30, 20, 30, 20),
-              child: SingleChildScrollView(
-                child: Column(children: [
-                  //profile
-                  Container(
-                    child: Row(children: [
-                      //photo
-                      Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image:
-                                    AssetImage('assets/images/billgate.jpg')),
-                            borderRadius: BorderRadius.circular((50))),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      //info
-                      Container(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${data['name']}',
-                                style: TextStyle(
-                                    fontFamily: 'Actor',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                'Nat. ID: ${data['natID']}',
-                                style: TextStyle(
-                                    fontFamily: 'Actor', fontSize: 15),
-                              ),
-                            ]),
-                      )
-                    ]),
-                  ),
-
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  //title
-                  Container(
-                    width: double.infinity,
-                    alignment: Alignment.centerLeft,
-                    child: const Text(
-                      'Bookings',
-                      style: TextStyle(
-                          fontFamily: 'Actor',
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold),
+            return Container(
+              height: double.infinity,
+              color: Color(0xFFDEDEDE),
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(30, 20, 30, 20),
+                child: SingleChildScrollView(
+                  child: Column(children: [
+                    //profile
+                    Container(
+                      child: Row(children: [
+                        //photo
+                        Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image:
+                                      AssetImage('assets/images/billgate.jpg')),
+                              borderRadius: BorderRadius.circular((50))),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        //info
+                        Container(
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${data['name']}',
+                                  style: TextStyle(
+                                      fontFamily: 'Actor',
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  'Nat. ID: ${data['natID']}',
+                                  style: TextStyle(
+                                      fontFamily: 'Actor', fontSize: 15),
+                                ),
+                              ]),
+                        )
+                      ]),
                     ),
-                  ),
 
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Booking()));
-                    },
-                    child: HomeCard(
-                        'assets/images/hospital.jpg',
-                        'Book A Ticket',
-                        'Describe symptom, choose time, and get a ticket',
-                        Color(0xFF61C4E3)),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    //title
+                    Container(
+                      width: double.infinity,
+                      alignment: Alignment.centerLeft,
+                      child: const Text(
+                        'Bookings',
+                        style: TextStyle(
+                            fontFamily: 'Actor',
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Booking()));
+                      },
+                      child: HomeCard(
+                          'assets/images/ticket-icon.png',
+                          'Book A Ticket',
+                          'Describe symptom, choose time, and get a ticket',
+                          Color(0xFF61C4E3)),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
 
-                  HomeCard(
-                      'assets/images/hospital.jpg',
-                      'Book A Ticket',
-                      'Describe symptom, choose time, and get a ticket',
-                      Color(0xFFA8DE65)),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  HomeCard(
-                      'assets/images/hospital.jpg',
-                      'Book A Ticket',
-                      'Describe symptom, choose time, and get a ticket',
-                      Color(0xFFF7E16D))
-                ]),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyTicket()));
+                      },
+                      child: HomeCard(
+                          'assets/images/clock-icon.png',
+                          'My Tickets',
+                          'View booked tickets, and schedule your time',
+                          Color(0xFFA8DE65)),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    HomeCard('assets/images/setting-icon.png', 'Settings',
+                        'Configure privacy and preferences', Color(0xFFDEDEDE))
+                  ]),
+                ),
               ),
             );
           }
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         });
   }
 }
